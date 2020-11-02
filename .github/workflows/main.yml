@@ -1,0 +1,27 @@
+name: infrastructure-as-code-action
+
+on:
+  push:
+    branches:
+      - master
+      - feature/*
+    paths-ignore:
+      - '**README.md'
+      - '**CHANGELOG.md'
+
+jobs:
+  main:
+    name: infrastructure-as-code-action
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build
+        run: docker build -t leanix/infrastructure-as-code-action:latest .
+
+      - name: Docker login and push image to Docker Hub
+        if: github.ref=='refs/heads/master'
+        run: |
+          echo ${{ secrets.DOCKER_HUB_PASSWORD }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+          docker push leanix/infrastructure-as-code-action:latest
