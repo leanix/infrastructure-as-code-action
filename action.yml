@@ -19,7 +19,7 @@ inputs:
     description: 'Directory defines the template directory default: .'
     required: true
     default: '.'
-  ACCOUNT:
+  account:
     description: 'Name of the Azure storage account'
     required: true
 runs:
