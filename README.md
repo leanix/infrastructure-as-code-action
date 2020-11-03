@@ -23,9 +23,10 @@ For storing the Terraform plan file the action uses an Azure Storage account.
 ### Terraform `plan`
 
 ```yaml
-- uses: leanix/infrastructure-as-code-action@master
+- name: Terraform plan
+  uses: leanix/infrastructure-as-code-action@master
   with:
-    entrypoint: 'terraform'
+    tool: 'terraform'
     blobaction: 'upload'
     container: 'mycontainer'
     command: 'plan'
@@ -35,9 +36,10 @@ For storing the Terraform plan file the action uses an Azure Storage account.
 ### Terraform `apply`
 
 ```yaml
-- uses: leanix/infrastructure-as-code-action@master
+- name: Terraform apply
+  uses: leanix/infrastructure-as-code-action@master
   with:
-    entrypoint: 'terraform'
+    tool: 'terraform'
     blobaction: 'download'
     container: 'mycontainer'
     command: 'apply'
