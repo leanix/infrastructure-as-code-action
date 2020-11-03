@@ -1,7 +1,7 @@
 name: 'LeanIX Infrastructure as Code'
 description: 'Plan & Apply Terraform/Terragrunt IaC'
 inputs:
-  entrypoint:
+  tool:
     description: 'Entrypoint can be terraform or terragrunt default: terragrunt'
     required: true
     default: 'terragrunt'
@@ -26,7 +26,7 @@ runs:
   using: 'docker'
   image: 'docker://leanix/infrastructure-as-code-action:latest'
   args:
-    - ${{ inputs.entrypoint }}
+    - ${{ inputs.tool }}
     - ${{ inputs.blobaction }}
     - ${{ inputs.container }}
     - ${{ inputs.command }}

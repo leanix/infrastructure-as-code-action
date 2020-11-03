@@ -2,6 +2,13 @@
 
 set -e
 
+TOOL=$1
+BLOBACTION=$2
+CONTAINER=$3
+COMMAND=$4
+DIRECTORY=$5
+ACCOUNT=$6
+
 function terraformPlanRemove() {
     NAME=$(cat $DIRECTORY/terraform-plan.lock)
     az storage blob delete --container $CONTAINER --name $NAME --auth-mode key --account-name $ACCOUNT
@@ -21,8 +28,8 @@ az login --service-principal --username $ARM_CLIENT_ID --password $ARM_CLIENT_SE
 
 if [[ $COMMAND == "plan" ]]; then
     terraformPlanRemove || true
-    $ENTRYPOINT init $DIRECTORY
-    $ENTRYPOINT plan -out=$DIRECTORY/plan.tfplan $DIRECTORY
+    $TOOL init $DIRECTORY
+    $TOOL plan -out=$DIRECTORY/plan.tfplan $DIRECTORY
     terraformPlanUpload
 
     echo ${{ github.sha }} > $DIRECTORY/terraform-plan.lock
@@ -35,7 +42,7 @@ fi
 
 if [[ $COMMAND == "apply" ]]; then
     terraformPlanDownload
-    $ENTRYPOINT init $DIRECTORY
-    $ENTRYPOINT apply $DIRECTORY/plan.tfplan $DIRECTORY
+    $TOOL init $DIRECTORY
+    $TOOL apply $DIRECTORY/plan.tfplan $DIRECTORY
     terraformPlanRemove || true
 fi
