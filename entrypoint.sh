@@ -27,7 +27,7 @@ function terraformPlanDownload() {
 az login --service-principal --username $ARM_CLIENT_ID --password $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
 
 if [[ $COMMAND == "plan" ]]; then
-    terraformPlanRemove
+    terraformPlanRemove || true
     $ENTRYPOINT init $DIRECTORY
     $ENTRYPOINT plan -out=$DIRECTORY/plan.tfplan $DIRECTORY
     terraformPlanUpload
@@ -44,5 +44,5 @@ if [[ $COMMAND == "apply" ]]; then
     terraformPlanDownload
     $ENTRYPOINT init $DIRECTORY
     $ENTRYPOINT apply $DIRECTORY/plan.tfplan $DIRECTORY
-    terraformPlanRemove
+    terraformPlanRemove || true
 fi
