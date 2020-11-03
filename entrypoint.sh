@@ -2,13 +2,6 @@
 
 set -e
 
-ENTRYPOINT=$1
-BLOBACTION=$2
-CONTAINER=$3
-COMMAND=$4
-DIRECTORY=$5
-ACCOUNT=$6
-
 function terraformPlanRemove() {
     NAME=$(cat $DIRECTORY/terraform-plan.lock)
     az storage blob delete --container $CONTAINER --name $NAME --auth-mode key --account-name $ACCOUNT
