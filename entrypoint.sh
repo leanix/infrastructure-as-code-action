@@ -43,6 +43,10 @@ fi
 if [[ $COMMAND == "apply" ]]; then
     terraformPlanDownload
     $TOOL init $DIRECTORY
-    $TOOL apply $DIRECTORY/plan.tfplan $DIRECTORY
+    if [[ $TOOL == "terraform" ]]; then
+        $TOOL apply $DIRECTORY/plan.tfplan
+    elif [[ $TOOL == "terragrunt" ]]; then
+        $TOOL apply $DIRECTORY/plan.tfplan $DIRECTORY
+    fi
     terraformPlanRemove || true
 fi
