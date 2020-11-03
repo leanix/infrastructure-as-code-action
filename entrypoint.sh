@@ -31,7 +31,7 @@ if [[ $COMMAND == "plan" ]]; then
     $ENTRYPOINT init $DIRECTORY
     $ENTRYPOINT plan -out=$DIRECTORY/plan.tfplan $DIRECTORY
     terraformPlanUpload
-    
+
     echo ${{ github.sha }} > $DIRECTORY/terraform-plan.lock
     git config --global user.name "${{ github.actor }}" \
       && git config --global user.email "${{ github.actor }}@users.noreply.github.com" \
@@ -46,4 +46,3 @@ if [[ $COMMAND == "apply" ]]; then
     $ENTRYPOINT apply $DIRECTORY/plan.tfplan $DIRECTORY
     terraformPlanRemove
 fi
- 
