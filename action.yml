@@ -26,4 +26,9 @@ runs:
   using: 'docker'
   image: 'docker://leanix/infrastructure-as-code-action:latest'
   args:
-    - ${{ inputs.environment }}
+    - ${{ inputs.entrypoint }}
+    - ${{ inputs.blobaction }}
+    - ${{ inputs.container }}
+    - ${{ inputs.command }}
+    - ${{ inputs.directory }}
+    - ${{ inputs.account }}
