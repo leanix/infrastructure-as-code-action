@@ -15,7 +15,7 @@ function terraformPlanRemove() {
 }
 
 function terraformPlanUpload() {
-    NAME=${{ github.sha }}
+    NAME=${GITHUB_SHA}
     az storage blob $BLOBACTION --file $DIRECTORY/plan.tfplan --container $CONTAINER --name $NAME --auth-mode key --account-name $ACCOUNT
 }
 
@@ -32,9 +32,9 @@ if [[ $COMMAND == "plan" ]]; then
     $TOOL plan -out=$DIRECTORY/plan.tfplan $DIRECTORY
     terraformPlanUpload
 
-    echo ${{ github.sha }} > $DIRECTORY/terraform-plan.lock
-    git config --global user.name "${{ github.actor }}" \
-      && git config --global user.email "${{ github.actor }}@users.noreply.github.com" \
+    echo "${GITHUB_SHA}" > $DIRECTORY/terraform-plan.lock
+    git config --global user.name "${GITHUB_ACTOR}" \
+      && git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com" \
       && git add $DIRECTORY/terraform-plan.lock \
       && git commit -m "Update $DIRECTORY/terraform-plan.lock" --allow-empty \
       && git push -u origin HEAD
