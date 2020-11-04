@@ -5,9 +5,6 @@ inputs:
     description: 'Entrypoint can be terraform or terragrunt default: terragrunt'
     required: true
     default: 'terragrunt'
-  blobaction:
-    description: 'Blobaction can be upload or download'
-    required: true
   container:
     description: 'Container defines the upload target for the plan file'
     required: true
@@ -27,7 +24,6 @@ runs:
   image: 'docker://leanix/infrastructure-as-code-action:latest'
   args:
     - ${{ inputs.tool }}
-    - ${{ inputs.blobaction }}
     - ${{ inputs.container }}
     - ${{ inputs.command }}
     - ${{ inputs.directory }}

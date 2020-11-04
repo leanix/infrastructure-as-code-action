@@ -27,7 +27,6 @@ For storing the Terraform plan file the action uses an Azure Storage account.
   uses: leanix/infrastructure-as-code-action@master
   with:
     tool: 'terraform'
-    blobaction: 'upload'
     container: 'mycontainer'
     command: 'plan'
     account: 'myAzureStorageAccount'
@@ -40,7 +39,6 @@ For storing the Terraform plan file the action uses an Azure Storage account.
   uses: leanix/infrastructure-as-code-action@master
   with:
     tool: 'terraform'
-    blobaction: 'download'
     container: 'mycontainer'
     command: 'apply'
     account: 'myAzureStorageAccount'
