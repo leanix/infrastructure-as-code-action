@@ -27,8 +27,13 @@ az login --service-principal --username $ARM_CLIENT_ID --password $ARM_CLIENT_SE
 
 if [[ $COMMAND == "plan" ]]; then
     terraformPlanRemove || true
-    $TOOL init $DIRECTORY
-    $TOOL plan -out=$DIRECTORY/plan.tfplan $DIRECTORY
+    if [[ $TOOL == "terraform" ]]; then
+        $TOOL init $DIRECTORY
+        $TOOL plan -out=$DIRECTORY/plan.tfplan $DIRECTORY
+    elif [[ $TOOL == "terragrunt" ]]; then
+        $TOOL init --terragrunt-working-dir $DIRECTORY
+        $TOOL plan -out=$DIRECTORY/plan.tfplan --terragrunt-working-dir $DIRECTORY
+    fi
     terraformPlanUpload
 
     echo "${GITHUB_SHA}" > $DIRECTORY/terraform-plan.lock
@@ -41,11 +46,12 @@ fi
 
 if [[ $COMMAND == "apply" ]]; then
     terraformPlanDownload
-    $TOOL init $DIRECTORY
     if [[ $TOOL == "terraform" ]]; then
+        $TOOL init $DIRECTORY
         $TOOL apply $DIRECTORY/plan.tfplan
     elif [[ $TOOL == "terragrunt" ]]; then
-        $TOOL apply $DIRECTORY/plan.tfplan $DIRECTORY
+        $TOOL init --terragrunt-working-dir $DIRECTORY
+        $TOOL apply $DIRECTORY/plan.tfplan --terragrunt-working-dir $DIRECTORY
     fi
     terraformPlanRemove || true
 fi
