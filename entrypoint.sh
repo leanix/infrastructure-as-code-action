@@ -32,7 +32,7 @@ if [[ $COMMAND == "plan" ]]; then
         $TOOL plan -out=$DIRECTORY/plan.tfplan $DIRECTORY
     elif [[ $TOOL == "terragrunt" ]]; then
         $TOOL init --terragrunt-working-dir $DIRECTORY
-        $TOOL plan -out=$DIRECTORY/plan.tfplan --terragrunt-working-dir $DIRECTORY
+        $TOOL plan -out=$PWD/plan.tfplan --terragrunt-working-dir $DIRECTORY
     fi
     terraformPlanUpload
 
@@ -51,7 +51,7 @@ if [[ $COMMAND == "apply" ]]; then
         $TOOL apply $DIRECTORY/plan.tfplan
     elif [[ $TOOL == "terragrunt" ]]; then
         $TOOL init --terragrunt-working-dir $DIRECTORY
-        $TOOL apply $DIRECTORY/plan.tfplan --terragrunt-working-dir $DIRECTORY
+        $TOOL apply $PWD/plan.tfplan --terragrunt-working-dir $DIRECTORY
     fi
     terraformPlanRemove || true
 fi
