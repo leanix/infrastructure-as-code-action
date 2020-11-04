@@ -3,11 +3,10 @@
 set -e
 
 TOOL=$1
-BLOBACTION=$2
-CONTAINER=$3
-COMMAND=$4
-DIRECTORY=$5
-ACCOUNT=$6
+CONTAINER=$2
+COMMAND=$3
+DIRECTORY=$4
+ACCOUNT=$5
 
 function terraformPlanRemove() {
     NAME=$(cat $DIRECTORY/terraform-plan.lock)
@@ -16,12 +15,12 @@ function terraformPlanRemove() {
 
 function terraformPlanUpload() {
     NAME=${GITHUB_SHA}
-    az storage blob $BLOBACTION --file $DIRECTORY/plan.tfplan --container $CONTAINER --name $NAME --auth-mode key --account-name $ACCOUNT
+    az storage blob upload --file $DIRECTORY/plan.tfplan --container $CONTAINER --name $NAME --auth-mode key --account-name $ACCOUNT
 }
 
 function terraformPlanDownload() {
     NAME=$(cat $DIRECTORY/terraform-plan.lock)
-    az storage blob $BLOBACTION --file $DIRECTORY/plan.tfplan --container $CONTAINER --name $NAME --auth-mode key --account-name $ACCOUNT
+    az storage blob download --file $DIRECTORY/plan.tfplan --container $CONTAINER --name $NAME --auth-mode key --account-name $ACCOUNT
 }
 
 az login --service-principal --username $ARM_CLIENT_ID --password $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
