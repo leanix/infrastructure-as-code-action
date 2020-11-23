@@ -14,7 +14,7 @@ function terraformPlanRemove() {
         NAME=$(cat $DIRECTORY/terraform-plan.lock)
         az storage blob delete --container $CONTAINER --name $NAME --auth-mode key --account-name $ACCOUNT
     else
-        SUFFIX_FIXED=echo ${SUFFIX} | tr '/' '-'
+        SUFFIX_FIXED=$(echo ${SUFFIX} | tr '/' '-')
         NAME=$(cat terraform-plan.lock)-${SUFFIX_FIXED}
         az storage blob delete --container $CONTAINER --name $NAME --auth-mode key --account-name $ACCOUNT
     fi
