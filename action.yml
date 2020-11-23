@@ -19,6 +19,9 @@ inputs:
   account:
     description: 'Name of the Azure storage account'
     required: true
+  suffix:
+    description: 'Suffix for the plan file'
+    required: false
 runs:
   using: 'docker'
   image: 'docker://leanix/infrastructure-as-code-action:latest'
@@ -28,3 +31,4 @@ runs:
     - ${{ inputs.command }}
     - ${{ inputs.directory }}
     - ${{ inputs.account }}
+    - ${{ inputs.suffix }}

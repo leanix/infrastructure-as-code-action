@@ -7,6 +7,7 @@ CONTAINER=$2
 COMMAND=$3
 DIRECTORY=$4
 ACCOUNT=$5
+SUFFIX=$6
 
 function terraformPlanRemove() {
     NAME=$(cat $DIRECTORY/terraform-plan.lock)
@@ -14,7 +15,11 @@ function terraformPlanRemove() {
 }
 
 function terraformPlanUpload() {
-    NAME=${GITHUB_SHA}
+    if [[ -z "$SUFFIX" ]]; then
+        NAME=${GITHUB_SHA}
+    else
+        NAME=${GITHUB_SHA}-${SUFFIX}
+    fi
     az storage blob upload --file $PWD/plan.tfplan --container $CONTAINER --name $NAME --auth-mode key --account-name $ACCOUNT
 }
 
@@ -36,9 +41,14 @@ if [[ $COMMAND == "plan" ]]; then
     fi
     terraformPlanUpload
 
-    echo "${GITHUB_SHA}" > $DIRECTORY/terraform-plan.lock
+    if [[ -z "$SUFFIX" ]]; then
+        echo "${GITHUB_SHA}" > $DIRECTORY/terraform-plan.lock
+    else
+        echo "${GITHUB_SHA}-${SUFFIX}" > $DIRECTORY/terraform-plan.lock
+    fi
     git config --global user.name "${GITHUB_ACTOR}" \
       && git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com" \
+      && git pull \
       && git add $DIRECTORY/terraform-plan.lock \
       && git commit -m "Update $DIRECTORY/terraform-plan.lock" --allow-empty \
       && git push -u origin HEAD
