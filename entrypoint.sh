@@ -10,22 +10,35 @@ ACCOUNT=$5
 SUFFIX=$6
 
 function terraformPlanRemove() {
-    NAME=$(cat $DIRECTORY/terraform-plan.lock)
-    az storage blob delete --container $CONTAINER --name $NAME --auth-mode key --account-name $ACCOUNT
+    if [[ -z "SUFFIX" ]]; then
+        NAME=$(cat $DIRECTORY/terraform-plan.lock)
+        az storage blob delete --container $CONTAINER --name $NAME --auth-mode key --account-name $ACCOUNT
+    else
+        SUFFIX-FIXED=$(echo ${SUFFIX} | tr '/' '-')
+        NAME=$(cat terraform-plan.lock)-${SUFFIX-FIXED}
+        az storage blob delete --container $CONTAINER --name $NAME --auth-mode key --account-name $ACCOUNT
+    fi
 }
 
 function terraformPlanUpload() {
     if [[ -z "$SUFFIX" ]]; then
         NAME=${GITHUB_SHA}
     else
-        NAME=${GITHUB_SHA}-${SUFFIX}
+        SUFFIX-FIXED=$(echo ${SUFFIX} | tr '/' '-')
+        NAME=${GITHUB_SHA}-${SUFFIX-FIXED}
     fi
     az storage blob upload --file $PWD/plan.tfplan --container $CONTAINER --name $NAME --auth-mode key --account-name $ACCOUNT
 }
 
 function terraformPlanDownload() {
-    NAME=$(cat $DIRECTORY/terraform-plan.lock)
-    az storage blob download --file $PWD/plan.tfplan --container $CONTAINER --name $NAME --auth-mode key --account-name $ACCOUNT
+    if [[ -z "SUFFIX" ]]; then
+        NAME=$(cat $DIRECTORY/terraform-plan.lock)
+        az storage blob download --file $PWD/plan.tfplan --container $CONTAINER --name $NAME --auth-mode key --account-name $ACCOUNT
+    else
+        SUFFIX-FIXED=$(echo ${SUFFIX} | tr '/' '-')
+        NAME=$(cat terraform-plan.lock)-${SUFFIX-FIXED}
+        az storage blob download --file $PWD/plan.tfplan --container $CONTAINER --name $NAME --auth-mode key --account-name $ACCOUNT
+    fi
 }
 
 az login --service-principal --username $ARM_CLIENT_ID --password $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
@@ -43,15 +56,12 @@ if [[ $COMMAND == "plan" ]]; then
 
     if [[ -z "$SUFFIX" ]]; then
         echo "${GITHUB_SHA}" > $DIRECTORY/terraform-plan.lock
-    else
-        echo "${GITHUB_SHA}-${SUFFIX}" > $DIRECTORY/terraform-plan.lock
+        git config --global user.name "${GITHUB_ACTOR}" \
+          && git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com" \
+          && git add $DIRECTORY/terraform-plan.lock \
+          && git commit -m "Update $DIRECTORY/terraform-plan.lock" --allow-empty \
+          && git push -u origin HEAD
     fi
-    git config --global user.name "${GITHUB_ACTOR}" \
-      && git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com" \
-      && git pull \
-      && git add $DIRECTORY/terraform-plan.lock \
-      && git commit -m "Update $DIRECTORY/terraform-plan.lock" --allow-empty \
-      && git push -u origin HEAD
 fi
 
 if [[ $COMMAND == "apply" ]]; then
