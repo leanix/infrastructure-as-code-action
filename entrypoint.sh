@@ -35,8 +35,8 @@ function terraformPlanDownload() {
         NAME=$(cat $DIRECTORY/terraform-plan.lock)
         az storage blob download --file $PWD/plan.tfplan --container $CONTAINER --name $NAME --auth-mode key --account-name $ACCOUNT
     else
-        SUFFIX-FIXED=$(echo ${SUFFIX} | tr '/' '-')
-        NAME=$(cat terraform-plan.lock)-${SUFFIX-FIXED}
+        SUFFIX_FIXED=$(echo ${SUFFIX} | tr '/' '-')
+        NAME=$(cat terraform-plan.lock)-${SUFFIX_FIXED}
         az storage blob download --file $PWD/plan.tfplan --container $CONTAINER --name $NAME --auth-mode key --account-name $ACCOUNT
     fi
 }
