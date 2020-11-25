@@ -10,7 +10,7 @@ ACCOUNT=$5
 SUFFIX=$6
 
 function terraformPlanRemove() {
-    if [[ -z "SUFFIX" ]]; then
+    if [[ -z "$SUFFIX" ]]; then
         NAME=$(cat $DIRECTORY/terraform-plan.lock)
         az storage blob delete --container $CONTAINER --name $NAME --auth-mode key --account-name $ACCOUNT
     else
@@ -31,7 +31,7 @@ function terraformPlanUpload() {
 }
 
 function terraformPlanDownload() {
-    if [[ -z "SUFFIX" ]]; then
+    if [[ -z "$SUFFIX" ]]; then
         NAME=$(cat $DIRECTORY/terraform-plan.lock)
         az storage blob download --file $PWD/plan.tfplan --container $CONTAINER --name $NAME --auth-mode key --account-name $ACCOUNT
     else
