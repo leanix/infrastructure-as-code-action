@@ -1,30 +1,30 @@
-name: 'LeanIX Infrastructure as Code'
-description: 'Plan & Apply Terraform/Terragrunt IaC'
+name: "LeanIX Infrastructure as Code"
+description: "Plan & Apply Terraform/Terragrunt IaC"
 inputs:
   tool:
-    description: 'Entrypoint can be terraform or terragrunt default: terragrunt'
+    description: "Entrypoint can be terraform or terragrunt default: terragrunt"
     required: true
-    default: 'terragrunt'
+    default: "terragrunt"
   container:
-    description: 'Container defines the upload target for the plan file'
+    description: "Container defines the upload target for the plan file"
     required: true
   command:
-    description: 'Command can be apply or plan default: plan'
+    description: "Command can be apply or plan default: plan"
     required: true
-    default: 'plan'
+    default: "plan"
   directory:
-    description: 'Directory defines the template directory default: .'
+    description: "Directory defines the template directory default: ."
     required: true
-    default: '.'
+    default: "."
   account:
-    description: 'Name of the Azure storage account'
+    description: "Name of the Azure storage account"
     required: true
   suffix:
-    description: 'Suffix for the plan file'
+    description: "Suffix for the plan file"
     required: false
 runs:
-  using: 'docker'
-  image: 'docker://leanix/infrastructure-as-code-action:latest'
+  using: "docker"
+  image: "docker://leanixacrpublic.azurecr.io/infrastructure-as-code-action:latest"
   args:
     - ${{ inputs.tool }}
     - ${{ inputs.container }}
