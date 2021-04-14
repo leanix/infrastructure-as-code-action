@@ -42,6 +42,7 @@ function terraformPlanDownload() {
 }
 
 az login --service-principal --username $ARM_CLIENT_ID --password $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
+az account set -s $ARM_SUBSCRIPTION_ID
 
 if [[ $COMMAND == "plan" ]]; then
     terraformPlanRemove || true
