@@ -1,4 +1,4 @@
-FROM leanix/terragrunt:latest
+FROM leanixacrpublic.azurecr.io/terragrunt:latest
 
 RUN apt update && apt install -y ca-certificates jq && apt-get clean && rm -rf /var/lib/apt/lists/*
 
