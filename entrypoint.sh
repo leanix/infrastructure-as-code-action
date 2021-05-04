@@ -47,8 +47,8 @@ az account set -s $ARM_SUBSCRIPTION_ID
 if [[ $COMMAND == "plan" ]]; then
     terraformPlanRemove || true
     if [[ $TOOL == "terraform" ]]; then
-        $TOOL init $DIRECTORY
-        $TOOL plan -out=$PWD/plan.tfplan $DIRECTORY
+        $TOOL -chdir=$DIRECTORY init
+        $TOOL -chdir=$DIRECTORY plan -out=$PWD/plan.tfplan
     elif [[ $TOOL == "terragrunt" ]]; then
         $TOOL init --terragrunt-working-dir $DIRECTORY
         $TOOL plan -out=$PWD/plan.tfplan --terragrunt-working-dir $DIRECTORY
@@ -68,8 +68,8 @@ fi
 if [[ $COMMAND == "apply" ]]; then
     terraformPlanDownload
     if [[ $TOOL == "terraform" ]]; then
-        $TOOL init $DIRECTORY
-        $TOOL apply $PWD/plan.tfplan
+        $TOOL -chdir=$DIRECTORY init
+        $TOOL -chdir=$DIRECTORY apply $PWD/plan.tfplan
     elif [[ $TOOL == "terragrunt" ]]; then
         $TOOL init --terragrunt-working-dir $DIRECTORY
         $TOOL apply $PWD/plan.tfplan --terragrunt-working-dir $DIRECTORY

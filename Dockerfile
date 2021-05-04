@@ -1,6 +1,6 @@
 FROM leanixacrpublic.azurecr.io/terragrunt:latest
 
-RUN apt update && apt install -y ca-certificates jq && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/* && update-ca-certificates
 
 COPY entrypoint.sh /entrypoint.sh
 
